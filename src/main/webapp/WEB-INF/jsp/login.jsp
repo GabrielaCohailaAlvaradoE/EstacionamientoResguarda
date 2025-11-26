@@ -99,24 +99,23 @@
 
         .visual-panel {
             background: radial-gradient(circle at 30% 20%, rgba(93,209,255,0.18), transparent 45%),
-                        radial-gradient(circle at 80% 70%, rgba(91,123,250,0.22), transparent 42%),
-                        linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+                radial-gradient(circle at 80% 70%, rgba(91,123,250,0.22), transparent 42%),
+                linear-gradient(160deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
             padding: 3rem 2.5rem;
             position: relative;
             isolation: isolate;
             overflow: hidden;
+            border-radius: 12px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
         }
-        .visual-panel::after {
-            content: "";
-            position: absolute;
-            inset: 12%;
-            border-radius: 24px;
-            border: 1px dashed rgba(255,255,255,0.35);
-            opacity: 0.6;
-            pointer-events: none;
+        .visual-panel h1 {
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: -0.4px;
         }
-        .visual-panel h1 { color: #fff; font-weight: 800; letter-spacing: -0.4px; }
-        .visual-panel p { color: rgba(255,255,255,0.78); }
+        .visual-panel p {
+            color: rgba(255,255,255,0.78);
+        }
         .visual-panel .floating-dot {
             position: absolute;
             width: 120px;
@@ -128,9 +127,27 @@
             animation: wander 12s ease-in-out infinite alternate;
             transform: translate3d(calc(var(--parallax-x) * -0.4), calc(var(--parallax-y) * -0.4), 0);
         }
-        .floating-dot.dot-1 { top: -20px; right: 18%; animation-delay: 0.4s; }
-        .floating-dot.dot-2 { bottom: -10px; left: 12%; width: 160px; height: 160px; border-radius: 40px; animation-delay: 1s; }
-        @keyframes wander { from { transform: translate3d(0,0,0); } to { transform: translate3d(12px, -14px, 0); } }
+        .floating-dot.dot-1 {
+            top: -20px;
+            right: 18%;
+            animation-delay: 0.4s;
+        }
+        .floating-dot.dot-2 {
+            bottom: -10px;
+            left: 12%;
+            width: 160px;
+            height: 160px;
+            border-radius: 40px;
+            animation-delay: 1s;
+        }
+        @keyframes wander {
+            from {
+                transform: translate3d(0,0,0);
+            }
+            to {
+                transform: translate3d(12px, -14px, 0);
+            }
+        }
 
         .logo-mark {
             width: 62px;
@@ -140,7 +157,7 @@
             place-items: center;
             font-weight: 800;
             letter-spacing: -0.3px;
-            background: linear-gradient(145deg, rgba(93,209,255,0.3), rgba(91,123,250,0.45));
+            background: linear-gradient(160deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
             color: #fff;
             border: 1px solid rgba(255,255,255,0.4);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
