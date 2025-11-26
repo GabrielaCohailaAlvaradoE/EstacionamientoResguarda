@@ -34,8 +34,7 @@
             --pointer-rel-x: 50;
             --pointer-rel-y: 50;
         }
-        :root[data-theme="light"],
-        body[data-theme="light"] {
+        [data-theme="light"] {
             --bg-1: #f7f9fc;
             --bg-2: #eaf0ff;
             --bg-3: #dbe7ff;
@@ -335,9 +334,6 @@
                 <div class="form-floating mb-4 password-visual-group">
                     <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
                     <label for="contrasena"><i class="bi bi-lock me-2"></i>Contraseña</label>
-                    <button class="password-visual-toggle" type="button" aria-label="Mostrar u ocultar contraseña" data-target="contrasena">
-                        <i class="bi bi-eye-slash"></i>
-                    </button>
                 </div>
 
                 <c:if test="${not empty error}">
@@ -362,59 +358,35 @@
 
     <script>
         (() => {
-            const root = document.documentElement;
             const body = document.body;
             const toggle = document.getElementById('clientLoginThemeToggle');
             const saved = localStorage.getItem('resguarda-client-login-theme');
-            const applyTheme = (theme) => {
-                body.dataset.theme = theme;
-                root.dataset.theme = theme;
-            };
-            applyTheme(saved || 'dark');
+            if (saved) body.dataset.theme = saved;
             const sync = () => toggle?.setAttribute('aria-pressed', body.dataset.theme === 'light');
             sync();
             toggle?.addEventListener('click', () => {
                 const next = body.dataset.theme === 'light' ? 'dark' : 'light';
-                applyTheme(next);
+                body.dataset.theme = next;
                 localStorage.setItem('resguarda-client-login-theme', next);
                 sync();
             });
         })();
 
         (() => {
-            const bindToggle = (btn, input) => {
-                const sync = () => {
-                    const isHidden = input.type === 'password';
-                    btn.innerHTML = isHidden ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
-                };
-                btn.addEventListener('click', () => {
-                    input.type = input.type === 'password' ? 'text' : 'password';
-                    sync();
-                });
-                sync();
-            };
-
             const enhancePasswords = () => {
                 document.querySelectorAll('input[type="password"]').forEach((input) => {
                     if (input.dataset.enhanced === 'true') return;
-                    input.dataset.enhanced = 'true';
-                    const wrapper = input.closest('.password-visual-group') || input.parentElement;
-                    let btn = wrapper?.querySelector('.password-visual-toggle');
-                    if (!btn) {
-                        if (wrapper) wrapper.classList.add('password-visual-group');
-                        btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = 'password-visual-toggle';
-                        btn.innerHTML = '<i class="bi bi-eye-slash"></i>';
-                        btn.setAttribute('aria-label', 'Mostrar u ocultar contraseña');
-                        const label = input.nextElementSibling && input.nextElementSibling.tagName === 'LABEL' ? input.nextElementSibling : null;
-                        if (label) {
-                            label.insertAdjacentElement('afterend', btn);
-                        } else {
-                            input.insertAdjacentElement('afterend', btn);
-                        }
+@@ -339,53 +388,53 @@
+                    if (label) {
+                        label.insertAdjacentElement('afterend', btn);
+                    } else {
+                        input.insertAdjacentElement('afterend', btn);
                     }
-                    bindToggle(btn, input);
+                    btn.addEventListener('click', () => {
+                        const isHidden = input.type === 'password';
+                        input.type = isHidden ? 'text' : 'password';
+                        btn.innerHTML = isHidden ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+                    });
                 });
             };
             document.addEventListener('DOMContentLoaded', enhancePasswords);

@@ -33,6 +33,9 @@
             --pointer-y: 50%;
             --pointer-rel-x: 50;
             --pointer-rel-y: 50;
+            --lift: 0px;
+            --input-surface: rgba(8,12,24,0.85);
+            --input-surface-focus: rgba(14,22,38,0.92);
         }
         [data-theme="dark"] {
             --bg-1: #0b1224;
