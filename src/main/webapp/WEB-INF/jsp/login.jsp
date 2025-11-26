@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Acceso Administrativo - Resguarda</title>
+    <title>Acceso - Resguarda</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -14,180 +14,390 @@
 
     <style>
         :root {
-            --blue-900: #0f172a;
-            --blue-700: #1e3c72;
-            --blue-600: #2a5298;
-            --blue-500: #3a6dbf;
-            --surface: rgba(255, 255, 255, 0.9);
-            --text: #0f172a;
-            --muted: #6b7280;
-            --border: rgba(42, 82, 152, 0.2);
-            --shadow: 0 25px 60px rgba(15, 31, 58, 0.25);
+            --bg-1: #0f172a;
+            --bg-2: #162447;
+            --bg-3: #1f375f;
+            --accent-1: #5dd1ff;
+            --accent-2: #5b7bfa;
+            --accent-3: #8ac4ff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card: rgba(255,255,255,0.9);
+            --stroke: rgba(255,255,255,0.5);
+            --shadow: 0 30px 80px rgba(15, 23, 42, 0.30);
+            --tilt-x: 0deg;
+            --tilt-y: 0deg;
+            --parallax-x: 0px;
+            --parallax-y: 0px;
+            --pointer-x: 50%;
+            --pointer-y: 50%;
         }
         [data-theme="dark"] {
-            --surface: rgba(15, 23, 42, 0.88);
-            --text: #e5e7eb;
-            --muted: #cbd5e1;
-            --border: rgba(58, 109, 191, 0.35);
-            --shadow: 0 25px 60px rgba(0,0,0,0.45);
+            --bg-1: #0b1224;
+            --bg-2: #0f1a38;
+            --bg-3: #15264e;
+            --text-main: #e5e7eb;
+            --text-muted: #cbd5e1;
+            --card: rgba(15, 23, 42, 0.9);
+            --stroke: rgba(255,255,255,0.15);
+            --shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
         }
 
+        * { box-sizing: border-box; }
+
         body {
+            min-height: 100vh;
+            margin: 0;
             font-family: 'Outfit', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at 10% 20%, rgba(58,109,191,0.14), transparent 30%),
-                        radial-gradient(circle at 80% 10%, rgba(15,23,42,0.2), transparent 32%),
-                        linear-gradient(135deg, rgba(15,23,42,0.88), rgba(30,58,138,0.82));
+            background: radial-gradient(circle at 18% 18%, rgba(93,209,255,0.18), transparent 25%),
+                        radial-gradient(circle at 82% 20%, rgba(91,123,250,0.25), transparent 30%),
+                        linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+            color: var(--text-main);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
             transition: background 0.4s ease;
         }
 
-        .floating-bubble {
+        .backdrop-orb {
             position: fixed;
-            width: 280px;
-            height: 280px;
+            width: 540px;
+            height: 540px;
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.18;
+            filter: blur(120px);
+            opacity: 0.25;
             z-index: 0;
-            animation: float 12s ease-in-out infinite alternate;
+            animation: float 11s ease-in-out infinite alternate;
         }
-        .bubble-a { background: #2a5298; top: 6%; left: 10%; }
-        .bubble-b { background: #3a6dbf; bottom: 10%; right: 8%; animation-delay: 2.5s; }
-        @keyframes float { from { transform: translateY(0) scale(1); } to { transform: translateY(-16px) scale(1.04); } }
+        .orb-a { background: #5b7bfa; top: -8%; left: 10%; }
+        .orb-b { background: #5dd1ff; bottom: -6%; right: 6%; animation-delay: 2s; }
+        @keyframes float { from { transform: translateY(0); } to { transform: translateY(-26px); } }
 
-        .login-card {
-            position: relative;
-            background: var(--surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 26px;
+        .login-shell {
+            width: min(1050px, 92vw);
+            background: linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
+            border: 1px solid var(--stroke);
+            border-radius: 30px;
             box-shadow: var(--shadow);
-            padding: 3rem;
-            width: 100%;
-            max-width: 460px;
-            animation: fadeInUp 0.6s ease-out;
+            overflow: hidden;
+            position: relative;
             z-index: 1;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(var(--parallax-x), var(--parallax-y), 0);
+            transition: transform 0.25s ease;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .login-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            align-items: stretch;
         }
 
-        .form-control {
-            background-color: rgba(255, 255, 255, 0.25);
-            border: 1px solid var(--border);
-            padding: 0.9rem 1rem;
-            font-weight: 600;
-            color: var(--text);
-            border-radius: 14px;
+        .visual-panel {
+            background: radial-gradient(circle at 30% 20%, rgba(93,209,255,0.18), transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(91,123,250,0.22), transparent 42%),
+                        linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+            padding: 3rem 2.5rem;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+        }
+        .visual-panel::after {
+            content: "";
+            position: absolute;
+            inset: 12%;
+            border-radius: 24px;
+            border: 1px dashed rgba(255,255,255,0.35);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .visual-panel h1 { color: #fff; font-weight: 800; letter-spacing: -0.4px; }
+        .visual-panel p { color: rgba(255,255,255,0.78); }
+        .visual-panel .floating-dot {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(93,209,255,0.28), rgba(91,123,250,0.32));
+            opacity: 0.8;
+            filter: blur(1px);
+            animation: wander 12s ease-in-out infinite alternate;
+            transform: translate3d(calc(var(--parallax-x) * -0.4), calc(var(--parallax-y) * -0.4), 0);
+        }
+        .floating-dot.dot-1 { top: -20px; right: 18%; animation-delay: 0.4s; }
+        .floating-dot.dot-2 { bottom: -10px; left: 12%; width: 160px; height: 160px; border-radius: 40px; animation-delay: 1s; }
+        @keyframes wander { from { transform: translate3d(0,0,0); } to { transform: translate3d(12px, -14px, 0); } }
+
+        .logo-mark {
+            width: 62px;
+            height: 62px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            background: linear-gradient(145deg, rgba(93,209,255,0.3), rgba(91,123,250,0.45));
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
         }
 
-        .form-control:focus {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 4px rgba(58, 109, 191, 0.18);
-            color: var(--text);
+        .form-panel {
+            background: var(--card);
+            padding: 3rem;
+            position: relative;
+            color: var(--text-main);
+        }
+        .form-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(91,123,250,0.08), transparent 30%),
+                        radial-gradient(circle at 80% 80%, rgba(93,209,255,0.08), transparent 32%);
+            pointer-events: none;
         }
 
-        .btn-primary-corp {
-            background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-            color: white;
-            border: none;
-            padding: 0.9rem;
+        .theme-toggle {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 2;
+            border: 1px solid var(--stroke);
+            background: rgba(255,255,255,0.22);
+            color: var(--text-main);
+            border-radius: 999px;
+            padding: 0.45rem 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
             font-weight: 700;
-            letter-spacing: 0.6px;
-            border-radius: 14px;
-            transition: all 0.3s;
-            box-shadow: 0 15px 35px rgba(58,109,191,0.35);
         }
-
-        .btn-primary-corp:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(58,109,191,0.4); }
-
-        .client-link { text-decoration: none; color: var(--muted); font-size: 0.95rem; transition: color 0.2s; }
-        .client-link:hover { color: var(--blue-500); }
-
-        .logo-mark { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(145deg, rgba(58,109,191,0.2), rgba(255,255,255,0.4)); display: grid; place-items: center; font-weight: 800; color: var(--blue-700); border: 1px solid var(--border); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
-        [data-theme="dark"] .logo-mark { color: #e5e7eb; background: linear-gradient(145deg, rgba(33,70,128,0.55), rgba(58,109,191,0.55)); }
-
-        .theme-toggle { position: absolute; top: 18px; right: 18px; border: 1px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.2); color: var(--text); padding: 0.4rem 0.75rem; display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.3); }
-        .theme-toggle:hover { transform: translateY(-1px); }
+        [data-theme="dark"] .theme-toggle { background: rgba(21,38,78,0.65); color: var(--text-main); }
         .theme-toggle .icon-moon { display: none; }
         [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
         [data-theme="dark"] .theme-toggle .icon-moon { display: inline-flex; }
 
+        .pill-switch {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            border: 1px solid var(--stroke);
+            background: rgba(255,255,255,0.18);
+            border-radius: 999px;
+            padding: 6px;
+            margin-bottom: 1.75rem;
+            gap: 6px;
+        }
+        .switch-btn {
+            border: none;
+            background: transparent;
+            border-radius: 999px;
+            padding: 0.65rem 0.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+        .switch-btn.active {
+            background: linear-gradient(135deg, #5b7bfa, #5dd1ff);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(91,123,250,0.35);
+        }
+
+        .form-floating label { color: var(--text-muted); font-weight: 600; }
+        .form-control {
+            background: rgba(255,255,255,0.65);
+            border: 1px solid var(--stroke);
+            border-radius: 14px;
+            color: var(--text-main);
+            padding: 0.95rem 1rem;
+            font-weight: 600;
+        }
+        [data-theme="dark"] .form-control { background: rgba(21,38,78,0.55); color: var(--text-main); }
+        .form-control:focus {
+            border-color: rgba(91,123,250,0.7);
+            box-shadow: 0 0 0 4px rgba(91,123,250,0.2);
+            background: rgba(255,255,255,0.75);
+            color: var(--text-main);
+        }
+        .form-control::placeholder { color: var(--text-muted); }
+
         .password-visual-group { position: relative; }
-        .password-visual-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: none; background: linear-gradient(135deg, rgba(58,109,191,0.14), rgba(58,109,191,0.08)); color: var(--blue-700); border-radius: 50%; width: 38px; height: 38px; display: grid; place-items: center; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .password-visual-toggle:hover { transform: translateY(-50%) scale(1.05); box-shadow: 0 10px 20px rgba(58,109,191,0.2); }
-        [data-theme="dark"] .password-visual-toggle { color: #e5e7eb; background: linear-gradient(135deg, rgba(58,109,191,0.25), rgba(15,23,42,0.55)); }
+        .password-visual-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: linear-gradient(135deg, rgba(91,123,250,0.16), rgba(93,209,255,0.16));
+            color: var(--text-main);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+        }
+
+        .btn-gradient {
+            border: none;
+            background: linear-gradient(135deg, #5b7bfa, #5dd1ff);
+            color: #fff;
+            padding: 1rem;
+            border-radius: 14px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            box-shadow: 0 16px 34px rgba(91,123,250,0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 22px 40px rgba(91,123,250,0.45); }
+
+        .alt-link { color: var(--text-muted); text-decoration: none; font-weight: 700; }
+        .alt-link:hover { color: var(--text-main); }
+
+        .form-section { display: none; }
+        .form-section.active { display: block; animation: fadeIn 0.35s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .cursor-glow {
+            position: fixed;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(93,209,255,0.16), rgba(91,123,250,0.08), transparent 68%);
+            mix-blend-mode: screen;
+            opacity: 0.9;
+            transform: translate3d(calc(var(--pointer-x) - 50%), calc(var(--pointer-y) - 50%), 0);
+            transition: transform 0.08s ease-out;
+            z-index: 1;
+        }
+
+        .backdrop-orb { transform: translate3d(calc(var(--parallax-x) * -0.35), calc(var(--parallax-y) * -0.35), 0); }
+
+        @media (max-width: 900px) { .visual-panel { display: none; } .form-panel { padding: 2.4rem; } }
     </style>
 </head>
 <body data-theme="light">
-    <div class="floating-bubble bubble-a"></div>
-    <div class="floating-bubble bubble-b"></div>
+    <div class="backdrop-orb orb-a"></div>
+    <div class="backdrop-orb orb-b"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
 
-    <main class="login-card">
-        <button class="theme-toggle" id="adminThemeToggle" type="button" aria-label="Cambiar modo de color">
-            <i class="bi bi-sun-fill icon-sun"></i>
-            <i class="bi bi-moon-stars-fill icon-moon"></i>
-        </button>
-        <div class="text-center mb-4">
-            <div class="d-inline-flex align-items-center justify-content-center logo-mark mb-3 shadow-sm">
-                ER
-            </div>
-            <h4 class="fw-bold text-dark mb-1" style="color: var(--text);">Estación Resguarda</h4>
-            <p class="text-muted small text-uppercase fw-bold" style="letter-spacing: 1px;">Acceso Corporativo</p>
-        </div>
-
-        <form action="<c:url value='/login' />" method="post">
-
-            <div class="form-floating mb-3 password-visual-group">
-                <input type="text" class="form-control rounded-3" id="usuario" name="usuario" placeholder="Usuario" required>
-                <label for="usuario"><i class="bi bi-person-fill me-2 text-muted"></i>Usuario</label>
-            </div>
-
-            <div class="form-floating mb-4 password-visual-group">
-                <input type="password" class="form-control rounded-3" id="contrasena" name="contrasena" placeholder="Contraseña" required>
-                <label for="contrasena"><i class="bi bi-shield-lock-fill me-2 text-muted"></i>Contraseña</label>
-            </div>
-
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger d-flex align-items-center p-2 rounded-3 mb-3 small" role="alert">
-                   <i class="bi bi-exclamation-circle-fill me-2"></i> ${error}
+    <section class="login-shell" id="loginShell">
+        <div class="login-grid">
+            <div class="visual-panel">
+                <span class="floating-dot dot-1" aria-hidden="true"></span>
+                <span class="floating-dot dot-2" aria-hidden="true"></span>
+                <div class="logo-mark mb-4">ER</div>
+                <h1 class="mb-3">Estacionamiento Resguarda</h1>
+                <p class="mb-4">Acceso directo para clientes y equipo con un panel que responde a tus movimientos.</p>
+                <div class="d-flex flex-column gap-3 text-white fw-semibold">
+                    <div><i class="bi bi-stars me-2"></i>Modo claro u oscuro siempre legible.</div>
+                    <div><i class="bi bi-mouse me-2"></i>Movimiento ligero al ritmo del cursor.</div>
+                    <div><i class="bi bi-shield-check me-2"></i>Solo diseño, la lógica sigue igual.</div>
                 </div>
-            </c:if>
-
-            <button class="w-100 btn btn-primary-corp mb-4" type="submit">
-                INICIAR SESIÓN
-            </button>
-
-            <div class="text-center border-top pt-3">
-                <p class="small text-muted mb-2">¿Eres usuario del estacionamiento?</p>
-                <a href="<c:url value='/cliente/login' />" class="btn btn-outline-primary w-100 rounded-3 fw-bold btn-sm py-2">
-                    <i class="bi bi-arrow-right-circle me-2"></i> Ir al Portal de Clientes
-                </a>
             </div>
-        </form>
-    </main>
+
+            <div class="form-panel position-relative">
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="Cambiar modo de color">
+                    <i class="bi bi-sun-fill icon-sun"></i>
+                    <i class="bi bi-moon-stars-fill icon-moon"></i>
+                    <span class="small fw-bold">Modo</span>
+                </button>
+
+                <div class="mb-4">
+                    <p class="text-uppercase text-muted fw-bold small mb-2">Acceso</p>
+                    <h4 class="fw-bolder mb-0" style="color: var(--text-main);">Elige cómo deseas ingresar</h4>
+                </div>
+
+                <div class="pill-switch" role="tablist" aria-label="Selector de tipo de acceso">
+                    <button class="switch-btn active" data-target="cliente" type="button" aria-pressed="true">Clientes</button>
+                    <button class="switch-btn" data-target="admin" type="button" aria-pressed="false">Administrativo</button>
+                </div>
+
+                <div class="form-section active" data-role-form="cliente" aria-live="polite">
+                    <form action="<c:url value='/cliente/login' />" method="post">
+                        <div class="form-floating mb-3 password-visual-group">
+                            <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
+                            <label for="dni"><i class="bi bi-person-vcard me-2"></i>DNI / Documento</label>
+                        </div>
+
+                        <div class="form-floating mb-4 password-visual-group">
+                            <input type="password" class="form-control" id="clienteContrasena" name="contrasena" placeholder="Contraseña" required>
+                            <label for="clienteContrasena"><i class="bi bi-lock me-2"></i>Contraseña</label>
+                        </div>
+
+                        <c:if test="${not empty error}">
+                            <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger d-flex align-items-center p-3 rounded-3 mb-4 small" role="alert">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> ${error}
+                            </div>
+                        </c:if>
+
+                        <button class="w-100 btn btn-gradient mb-3" type="submit">Ingresar como Cliente</button>
+                        <div class="d-flex justify-content-between align-items-center small">
+                            <a class="alt-link" href="<c:url value='/registro' />">Crear cuenta nueva</a>
+                            <a class="alt-link" href="<c:url value='/' />">Acceso administrativo</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="form-section" data-role-form="admin" aria-live="polite">
+                    <form action="<c:url value='/login' />" method="post">
+                        <div class="form-floating mb-3 password-visual-group">
+                            <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
+                            <label for="usuario"><i class="bi bi-person-fill me-2"></i>Usuario</label>
+                        </div>
+
+                        <div class="form-floating mb-4 password-visual-group">
+                            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Contraseña" required>
+                            <label for="contrasena"><i class="bi bi-shield-lock-fill me-2"></i>Contraseña</label>
+                        </div>
+
+                        <c:if test="${not empty error}">
+                            <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger d-flex align-items-center p-3 rounded-3 mb-4 small" role="alert">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i> ${error}
+                            </div>
+                        </c:if>
+
+                        <button class="w-100 btn btn-gradient mb-3" type="submit">Ingresar al Panel</button>
+                        <div class="text-center small">
+                            <a class="alt-link" href="<c:url value='/cliente/login' />">¿Eres cliente? Ingresa aquí</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
         (() => {
             const body = document.body;
-            const toggle = document.getElementById('adminThemeToggle');
-            const saved = localStorage.getItem('resguarda-admin-theme');
+            const toggle = document.getElementById('themeToggle');
+            const saved = localStorage.getItem('resguarda-unified-theme');
             if (saved) body.dataset.theme = saved;
             const sync = () => toggle?.setAttribute('aria-pressed', body.dataset.theme === 'dark');
             sync();
             toggle?.addEventListener('click', () => {
                 const next = body.dataset.theme === 'dark' ? 'light' : 'dark';
                 body.dataset.theme = next;
-                localStorage.setItem('resguarda-admin-theme', next);
+                localStorage.setItem('resguarda-unified-theme', next);
                 sync();
             });
+        })();
+
+        (() => {
+            const buttons = document.querySelectorAll('.switch-btn');
+            const forms = document.querySelectorAll('.form-section');
+            const activate = (target) => {
+                buttons.forEach(btn => {
+                    const active = btn.dataset.target === target;
+                    btn.classList.toggle('active', active);
+                    btn.setAttribute('aria-pressed', active);
+                });
+                forms.forEach(form => form.classList.toggle('active', form.dataset.roleForm === target));
+            };
+            buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.target)));
+            activate('cliente');
         })();
 
         (() => {
@@ -216,6 +426,40 @@
                 });
             };
             document.addEventListener('DOMContentLoaded', enhancePasswords);
+        })();
+
+        (() => {
+            const shell = document.getElementById('loginShell');
+            const root = document.documentElement;
+            const glow = document.querySelector('.cursor-glow');
+            if (!shell) return;
+
+            const update = (e) => {
+                const rect = shell.getBoundingClientRect();
+                const relX = (e.clientX - rect.left) / rect.width - 0.5;
+                const relY = (e.clientY - rect.top) / rect.height - 0.5;
+                const tilt = 5;
+                const slide = 12;
+                root.style.setProperty('--tilt-y', `${relX * tilt}deg`);
+                root.style.setProperty('--tilt-x', `${-relY * tilt}deg`);
+                root.style.setProperty('--parallax-x', `${relX * slide}px`);
+                root.style.setProperty('--parallax-y', `${relY * slide}px`);
+                root.style.setProperty('--pointer-x', `${e.clientX}px`);
+                root.style.setProperty('--pointer-y', `${e.clientY}px`);
+                glow?.classList.add('visible');
+            };
+
+            shell.addEventListener('mousemove', update);
+            document.addEventListener('mousemove', (e) => {
+                root.style.setProperty('--pointer-x', `${e.clientX}px`);
+                root.style.setProperty('--pointer-y', `${e.clientY}px`);
+            });
+            shell.addEventListener('mouseleave', () => {
+                root.style.setProperty('--tilt-y', '0deg');
+                root.style.setProperty('--tilt-x', '0deg');
+                root.style.setProperty('--parallax-x', '0px');
+                root.style.setProperty('--parallax-y', '0px');
+            });
         })();
     </script>
 </body>
