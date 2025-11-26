@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Acceso - Resguarda</title>
+    <title>Acceso administrativo</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -31,6 +31,8 @@
             --parallax-y: 0px;
             --pointer-x: 50%;
             --pointer-y: 50%;
+            --pointer-rel-x: 50;
+            --pointer-rel-y: 50;
         }
         [data-theme="dark"] {
             --bg-1: #0b1224;
@@ -85,7 +87,8 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(var(--parallax-x), var(--parallax-y), 0);
-            transition: transform 0.25s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.30), 0 0 0 1px rgba(255,255,255,0.05) inset;
         }
 
         .login-grid {
@@ -179,31 +182,6 @@
         [data-theme="dark"] .theme-toggle .icon-sun { display: none; }
         [data-theme="dark"] .theme-toggle .icon-moon { display: inline-flex; }
 
-        .pill-switch {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            border: 1px solid var(--stroke);
-            background: rgba(255,255,255,0.18);
-            border-radius: 999px;
-            padding: 6px;
-            margin-bottom: 1.75rem;
-            gap: 6px;
-        }
-        .switch-btn {
-            border: none;
-            background: transparent;
-            border-radius: 999px;
-            padding: 0.65rem 0.5rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-        }
-        .switch-btn.active {
-            background: linear-gradient(135deg, #5b7bfa, #5dd1ff);
-            color: #fff;
-            box-shadow: 0 10px 25px rgba(91,123,250,0.35);
-        }
-
         .form-floating label { color: var(--text-muted); font-weight: 600; }
         .form-control {
             background: rgba(255,255,255,0.65);
@@ -255,9 +233,8 @@
         .alt-link { color: var(--text-muted); text-decoration: none; font-weight: 700; }
         .alt-link:hover { color: var(--text-main); }
 
-        .form-section { display: none; }
-        .form-section.active { display: block; animation: fadeIn 0.35s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .form-section { display: block; animation: fadeIn 0.35s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px) scale(0.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
         .cursor-glow {
             position: fixed;
@@ -273,6 +250,17 @@
             z-index: 1;
         }
 
+        .pointer-shine {
+            position: absolute;
+            inset: 0;
+            border-radius: 30px;
+            background: radial-gradient(circle at calc(var(--pointer-rel-x) * 1%) calc(var(--pointer-rel-y) * 1%), rgba(93,209,255,0.22), rgba(91,123,250,0.12), transparent 45%);
+            mix-blend-mode: screen;
+            opacity: 0.55;
+            pointer-events: none;
+            transition: background 0.12s ease-out;
+        }
+
         .backdrop-orb { transform: translate3d(calc(var(--parallax-x) * -0.35), calc(var(--parallax-y) * -0.35), 0); }
 
         @media (max-width: 900px) { .visual-panel { display: none; } .form-panel { padding: 2.4rem; } }
@@ -284,17 +272,19 @@
     <div class="cursor-glow" aria-hidden="true"></div>
 
     <section class="login-shell" id="loginShell">
+        <span class="pointer-shine" aria-hidden="true"></span>
         <div class="login-grid">
             <div class="visual-panel">
                 <span class="floating-dot dot-1" aria-hidden="true"></span>
                 <span class="floating-dot dot-2" aria-hidden="true"></span>
                 <div class="logo-mark mb-4">ER</div>
-                <h1 class="mb-3">Estacionamiento Resguarda</h1>
-                <p class="mb-4">Acceso directo para clientes y equipo con un panel que responde a tus movimientos.</p>
-                <div class="d-flex flex-column gap-3 text-white fw-semibold">
-                    <div><i class="bi bi-stars me-2"></i>Modo claro u oscuro siempre legible.</div>
-                    <div><i class="bi bi-mouse me-2"></i>Movimiento ligero al ritmo del cursor.</div>
-                    <div><i class="bi bi-shield-check me-2"></i>Solo diseño, la lógica sigue igual.</div>
+                <h1 class="mb-3">Panel administrativo</h1>
+                <p class="mb-4">Animación ligera con relieve 3D y brillo que sigue tu cursor.</p>
+                <div class="row g-3 text-white fw-semibold">
+                    <div class="col-6 d-flex align-items-center gap-2"><i class="bi bi-layers"></i><span>Tarjetas con efecto tilt.</span></div>
+                    <div class="col-6 d-flex align-items-center gap-2"><i class="bi bi-brightness-high"></i><span>Modo claro/oscuro legible.</span></div>
+                    <div class="col-6 d-flex align-items-center gap-2"><i class="bi bi-cursor"></i><span>Sombras dinámicas.</span></div>
+                    <div class="col-6 d-flex align-items-center gap-2"><i class="bi bi-water"></i><span>Fondos en movimiento suave.</span></div>
                 </div>
             </div>
 
@@ -307,41 +297,9 @@
 
                 <div class="mb-4">
                     <p class="text-uppercase text-muted fw-bold small mb-2">Acceso</p>
-                    <h4 class="fw-bolder mb-0" style="color: var(--text-main);">Elige cómo deseas ingresar</h4>
+                    <h4 class="fw-bolder mb-0" style="color: var(--text-main);">Administradores</h4>
                 </div>
-
-                <div class="pill-switch" role="tablist" aria-label="Selector de tipo de acceso">
-                    <button class="switch-btn active" data-target="cliente" type="button" aria-pressed="true">Clientes</button>
-                    <button class="switch-btn" data-target="admin" type="button" aria-pressed="false">Administrativo</button>
-                </div>
-
-                <div class="form-section active" data-role-form="cliente" aria-live="polite">
-                    <form action="<c:url value='/cliente/login' />" method="post">
-                        <div class="form-floating mb-3 password-visual-group">
-                            <input type="text" class="form-control" id="dni" name="dni" placeholder="DNI" required>
-                            <label for="dni"><i class="bi bi-person-vcard me-2"></i>DNI / Documento</label>
-                        </div>
-
-                        <div class="form-floating mb-4 password-visual-group">
-                            <input type="password" class="form-control" id="clienteContrasena" name="contrasena" placeholder="Contraseña" required>
-                            <label for="clienteContrasena"><i class="bi bi-lock me-2"></i>Contraseña</label>
-                        </div>
-
-                        <c:if test="${not empty error}">
-                            <div class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger d-flex align-items-center p-3 rounded-3 mb-4 small" role="alert">
-                                <i class="bi bi-exclamation-circle-fill me-2"></i> ${error}
-                            </div>
-                        </c:if>
-
-                        <button class="w-100 btn btn-gradient mb-3" type="submit">Ingresar como Cliente</button>
-                        <div class="d-flex justify-content-between align-items-center small">
-                            <a class="alt-link" href="<c:url value='/registro' />">Crear cuenta nueva</a>
-                            <a class="alt-link" href="<c:url value='/' />">Acceso administrativo</a>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="form-section" data-role-form="admin" aria-live="polite">
+                <div class="form-section" aria-live="polite">
                     <form action="<c:url value='/login' />" method="post">
                         <div class="form-floating mb-3 password-visual-group">
                             <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Usuario" required>
@@ -359,9 +317,11 @@
                             </div>
                         </c:if>
 
-                        <button class="w-100 btn btn-gradient mb-3" type="submit">Ingresar al Panel</button>
-                        <div class="text-center small">
-                            <a class="alt-link" href="<c:url value='/cliente/login' />">¿Eres cliente? Ingresa aquí</a>
+                        <button class="w-100 btn btn-gradient mb-3" type="submit">Ingresar</button>
+                        <div class="text-center small d-flex flex-column flex-md-row gap-3 justify-content-center">
+                            <a class="alt-link" href="<c:url value='/cliente/login' />">Ir al acceso de clientes</a>
+                            <span class="text-muted">|</span>
+                            <a class="alt-link" href="<c:url value='/registro' />">Crear cuenta cliente</a>
                         </div>
                     </form>
                 </div>
@@ -383,21 +343,6 @@
                 localStorage.setItem('resguarda-unified-theme', next);
                 sync();
             });
-        })();
-
-        (() => {
-            const buttons = document.querySelectorAll('.switch-btn');
-            const forms = document.querySelectorAll('.form-section');
-            const activate = (target) => {
-                buttons.forEach(btn => {
-                    const active = btn.dataset.target === target;
-                    btn.classList.toggle('active', active);
-                    btn.setAttribute('aria-pressed', active);
-                });
-                forms.forEach(form => form.classList.toggle('active', form.dataset.roleForm === target));
-            };
-            buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.target)));
-            activate('cliente');
         })();
 
         (() => {
@@ -444,6 +389,8 @@
                 root.style.setProperty('--tilt-x', `${-relY * tilt}deg`);
                 root.style.setProperty('--parallax-x', `${relX * slide}px`);
                 root.style.setProperty('--parallax-y', `${relY * slide}px`);
+                root.style.setProperty('--pointer-rel-x', `${(relX + 0.5) * 100}`);
+                root.style.setProperty('--pointer-rel-y', `${(relY + 0.5) * 100}`);
                 root.style.setProperty('--pointer-x', `${e.clientX}px`);
                 root.style.setProperty('--pointer-y', `${e.clientY}px`);
                 glow?.classList.add('visible');

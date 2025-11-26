@@ -30,6 +30,8 @@
             --parallax-y: 0px;
             --pointer-x: 50%;
             --pointer-y: 50%;
+            --pointer-rel-x: 50;
+            --pointer-rel-y: 50;
         }
         [data-theme="light"] {
             --bg-1: #f4f7fb;
@@ -77,7 +79,8 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             transform: perspective(1200px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(var(--parallax-x), var(--parallax-y), 0);
-            transition: transform 0.25s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.04) inset;
         }
 
         .card-visual {
@@ -231,6 +234,17 @@
         }
 
         .bubble { transform: translate3d(calc(var(--parallax-x) * -0.35), calc(var(--parallax-y) * -0.35), 0); }
+
+        .pointer-shine {
+            position: absolute;
+            inset: 0;
+            border-radius: 28px;
+            background: radial-gradient(circle at calc(var(--pointer-rel-x) * 1%) calc(var(--pointer-rel-y) * 1%), rgba(93,209,255,0.22), rgba(91,123,250,0.12), transparent 45%);
+            mix-blend-mode: screen;
+            opacity: 0.55;
+            pointer-events: none;
+            transition: background 0.12s ease-out;
+        }
     </style>
 </head>
 <body data-theme="dark">
@@ -239,16 +253,17 @@
     <div class="cursor-glow" aria-hidden="true"></div>
 
     <section class="card-shell" id="clientCard">
+        <span class="pointer-shine" aria-hidden="true"></span>
         <div class="card-visual">
             <span class="floating-dot dot-1" aria-hidden="true"></span>
             <span class="floating-dot dot-2" aria-hidden="true"></span>
             <div class="logo-mark mb-4">ER</div>
-            <h2 class="fw-bold">Hola de nuevo</h2>
-            <p class="mb-4">Ingresa con un panel ligero que se mueve contigo y respeta tu modo de color.</p>
+            <h2 class="fw-bold">Ingreso de clientes</h2>
+            <p class="mb-4">Efecto tilt 3D, brillo suave y trazos que reaccionan al movimiento.</p>
             <div class="d-flex flex-column gap-3 fw-semibold">
-                <div><i class="bi bi-stars me-2"></i>Colores vivos y tipografías nítidas.</div>
-                <div><i class="bi bi-mouse me-2"></i>Movimiento sutil al seguir el mouse.</div>
-                <div><i class="bi bi-moon-stars me-2"></i>Modo adaptable para cuidar la legibilidad.</div>
+                <div><i class="bi bi-mouse3 me-2"></i>Parallax ligero siguiendo tu cursor.</div>
+                <div><i class="bi bi-brightness-high me-2"></i>Modo claro y oscuro con buen contraste.</div>
+                <div><i class="bi bi-magic me-2"></i>Bordes luminosos y fondo en deriva lenta.</div>
             </div>
         </div>
 
@@ -352,6 +367,8 @@
                 root.style.setProperty('--tilt-x', `${-relY * tilt}deg`);
                 root.style.setProperty('--parallax-x', `${relX * slide}px`);
                 root.style.setProperty('--parallax-y', `${relY * slide}px`);
+                root.style.setProperty('--pointer-rel-x', `${(relX + 0.5) * 100}`);
+                root.style.setProperty('--pointer-rel-y', `${(relY + 0.5) * 100}`);
                 root.style.setProperty('--pointer-x', `${e.clientX}px`);
                 root.style.setProperty('--pointer-y', `${e.clientY}px`);
                 glow?.classList.add('visible');
